@@ -1,22 +1,24 @@
 <?php
-#include 'database_connection.php';
-require 'includes/database_connection.php';
+require 'classes/Database.php';
 require 'includes/url.php';
+
 session_start();
-$conn=getDB();
-#if we use require statement instead of include then if browser fails to find the require file then it stops the program
- #which doesnt happen with include statement
+$db= new Database();
+$conn= $db->connectDB();
+
 
 $sql="SELECT * 
 FROM articles
 ORDER BY id"; 
-$results= mysqli_query($conn,$sql);
+
+$results= $conn->query($sql);
+
 if($results===false)//identical operator===
 	{
-		echo mysqli_error($conn);
+		var_dump($conn->errorInfo());
 	}
 else{
-	$articles=mysqli_fetch_all($results, MYSQLI_ASSOC);
+	$articles=$results->fetchAll(PDO::FETCH_ASSOC);
 	//var_dump($articles);
 }
 ?>
